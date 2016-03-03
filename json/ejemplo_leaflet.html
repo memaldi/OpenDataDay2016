@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <style>
+      #map { height: 900px; }
+    </style>
+  </head>
+  <body>
+    <!-- div donte va el mapa -->
+    <div id="map"></div>
+
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+    <script>
+      // Declaramos el mapa
+      var map = L.map('map').setView([43.212839, -2.575427], 10);
+      // Capa de MapBox
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: 'memaldi.p677d084',
+        accessToken: 'pk.eyJ1IjoibWVtYWxkaSIsImEiOiJjaWh1cG1iZ3cwMDRkdmRtNW95MHF4d3BpIn0.Fwm5ckUQfxt9OKvsvPgFGg'
+      }).addTo(map);
+
+      // Iterar el JSON
+      $.getJSON('http://localhost:8000/restaurantes.json', function(jsonData) {
+        $.each(jsonData, function(key, val){
+          // Dibujar Marcadores solamente
+          // var marker = L.marker([val["Latitud"], val["Longitud"]]).addTo(map);
+          // Para poner popups
+          var marker = L.marker([val["Latitud"], val["Longitud"]]);
+          marker.bindPopup("<b>" + val["Nombre del documento"] + "</b><br> " + val["Municipio"] + "," + val["Provincia"] + ". <br>" + val["Email"]).openPopup();
+          marker.addTo(map);
+          console.log(key);
+          console.log(val);
+        });
+      });
+
+    </script>
+  </body>
+</html>
